@@ -1,12 +1,302 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
+    <!-- META INFORMACIÓN Y RECURSOS -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptiTrailers</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>TrailersPelis</title>
 </head>
 <body>
-    <img src="https://m.media-amazon.com/images/S/pv-target-images/543fce1906fb5f602dbeafe171864f28d7f3955bfbb38794bd6a67c0dc1cbca9._SX1080_FMjpg_.jpg" alt="frira">
-    <h1> TrailerPelis </h1>
+    <div>
+        <!-- SECCIÓN 1: ENCABEZADO Y NAVEGACIÓN 
+             - Contiene el título principal
+             - Menú de navegación con 3 categorías principales
+             - Uso de Font Awesome para iconos
+        -->
+    
+        <div class="encabezado">
+            <h1>Optitrailers</h1>
+            <h2>Explora tus géneros favoritos y más</h2>
+            <div class="menu-container">
+                <div class="menu-item">
+                    <button onclick="toggleMenu('community-options')"><i class="fas fa-users"></i> Comunidad</button>
+                    <ul id="community-options">
+                        <li><i class="fas fa-headset"></i> Atención al Cliente
+                            <div class="sub-menu">
+                                <ul>
+                                    <li><i class="fas fa-headset"></i> Soporte Técnico</li>
+                                    <li><i class="fas fa-question-circle"></i> Preguntas Frecuentes</li>
+                                </ul>
+                        </li>
+                        <li><i class="fas fa-user-friends"></i> Operadores Activos</li>
+                    </ul>
+                </div>
+                <div class="menu-item">
+                    <button onclick="toggleMenu('contact-options')"><i class="fas fa-phone"></i> Contactos</button>
+                    <ul id="contact-options">
+                        <li><i class="fas fa-phone-alt"></i> Teléfono</li>
+                        <li><i class="fas fa-envelope"></i> Email</li>
+                    </ul>
+                </div>
+
+                <!-- Parte de los settings, incluye personalizacion y información sobre la pagina web -->
+                <div class="menu-item">
+                    <button onclick="toggleMenu('settings-options')"><i class="fas fa-cog"></i> Settings</button>
+                    <ul id="settings-options">
+
+                        <li>
+                            <!-- Parte de personalización de la pagina a justo del usuario -->
+                            <i class="Personalizar"></i> 
+                            <button onclick="toggleColorPicker()" id="personalizarBtn">
+                                <i class="personalizarBtn"></i> Personalizar
+                            </button>
+                            <div class="color-picker-modal" id="colorPickerModal" style="display:none;">
+                                <div class="color-picker-content">
+                                    <label>
+                                        Fondo:
+                                        <input type="color" id="colorFondo" value="#090910">
+                                    </label>
+                                    <label>
+                                        Texto:
+                                        <input type="color" id="colorTexto" value="#f2e9e4">
+                                    </label>
+                                    <label>
+                                        Botón:
+                                        <input type="color" id="colorBoton" value="#9a8c98">
+                                    </label>
+                                    <label>
+                                        borde:
+                                        <input type="color" id="colorBorde" value="#ffd900">
+                                    </label>
+                                    <button onclick="aplicarColoresPersonalizados()">Aplicar</button>
+                                    <div class="color-examples">
+                                        <span>Acceso rapido:</span>
+                                        <button style="background:#000000;color:#ffffff" onclick="setColores('#090910','#ffffff','#FFD900', '#ffd900')">Oscuro</button>
+                                        <button style="background:#000000;color:#ffffff" onclick="setColores('#3a3939','#000000','#000000', '#00A7FF')">Claro</button>
+                                    </div>
+                                    <button onclick="toggleColorPicker()">Cerrar</button>
+                                </div>
+                            </div>
+                            <script>
+                            function toggleColorPicker() {
+                                const modal = document.getElementById('colorPickerModal');
+                                modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+                            }
+                            function aplicarColoresPersonalizados() {
+                                document.body.style.background = document.getElementById('colorFondo').value;
+                                document.body.style.color = document.getElementById('colorTexto').value;
+                                let botones = document.querySelectorAll('button, .btn-detalles, .btn-reservar, .btn-confirmar');
+                                botones.forEach(b=>b.style.background=document.getElementById('colorBoton').value);
+                            }
+                            function setColores(fondo, texto, boton, borde) {
+                                document.getElementById('colorFondo').value = fondo;
+                                document.getElementById('colorTexto').value = texto;
+                                document.getElementById('colorBoton').value = boton;
+                                document.getElementById('colorBorde').value = borde;
+                                aplicarColoresPersonalizados();
+                            }
+                            </script>
+                        </li>
+
+                        <!-- Parte de seguridad y privacidad del usuario -->
+                        <li>
+                            <button onclick="toggleMenu('security-options')" id="seguridadBtn"><i class="seguridad"></i> Seguridad</button>
+                            <ul id="security-options" style="display:none;">
+                                <li>
+                                    <i class="privacidad"></i> 
+                                    <button onclick="toggleModal('privacyModal')">Privacidad</button>
+                                </li>
+                                <li>
+                                    <i class="terminos de servicio"></i> 
+                                    <button onclick="toggleModal('termsModal')">Términos de Servicio</button>
+                                </li>
+                                <li>
+                                    <label for="toggleCookies"><i class="fas fa-cookie-bite"></i> Cookies
+                                        <input type="checkbox" id="toggleCookies" checked>
+                                    </label>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Modales para Privacidad y Términos -->
+                        <div class="modal" id="privacyModal" style="display:none;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3>Política de Privacidad</h3>
+                                    <button class="modal-close" onclick="toggleModal('privacyModal')">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Aquí se muestra la información sobre la privacidad del cliente...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal" id="termsModal" style="display:none;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3>Términos de Servicio</h3>
+                                    <button class="modal-close" onclick="toggleModal('termsModal')">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Aquí se muestran los términos de servicio...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                        function toggleMenu(id) {
+                            const el = document.getElementById(id);
+                            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                        }
+                        function toggleModal(id) {
+                            const modal = document.getElementById(id);
+                            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+                        }
+                        </script>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: CARTELERA DE PELÍCULAS
+             - Grid responsive de películas
+             - Cada película tiene:
+                * Imagen de portada
+                * Título
+                * Descripción corta
+                * Botón de detalles
+        -->
+        <div class="cartelera">
+            <h2>Cartelera</h2>
+            <div class="peliculas">
+
+                <div class="pelicula">
+                    <img src="https://es.web.img3.acsta.net/img/6d/7e/6d7ebaf55a56605c074747f74824fb99.jpg" alt="Minecraft la película">
+                    <div class="info-pelicula">
+                        <h3>Minecraft la película</h3>
+                        <p>Bienvenido al mundo de Minecraft, donde todo es posible.</p>
+                        <button class="btn-detalles" data-movie="1">Ver detalles</button>
+                    </div>
+                </div>
+
+                <div class="pelicula">
+                    <img src="https://hips.hearstapps.com/hmg-prod/images/thunderbolts-poster-66f184dbe403e.jpg" alt="Thunderbolts">
+                    <div class="info-pelicula">
+                        <h3>Thunderbolts*</h3>
+                        <p>Un grupo de supervillanos son reclutados para realizar misiones para el gobierno.</p>
+                        <button class="btn-detalles" data-movie="2">Ver detalles</button>
+                    </div>
+                </div>
+                <div class="pelicula">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMWY3MzM1Y2YtZWIzOS00ZWJiLWI1YzYtZDY5MzFkY2I4ZjY5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Pecadores">
+                    <div class="info-pelicula">
+                        <h3>Pecadores</h3>
+                        <p>Dos hermanos enfrentan un mal sobrenatural al regresar a su ciudad natal.</p>
+                        <button class="btn-detalles" data-movie="3">Ver detalles</button>
+                    </div>
+                </div>
+
+                <div class="pelicula">
+                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQpCnhGo3oDx9spX1TDLgOI17xVOUVzFifqfymnHZLwr_q-0OEU" alt="Kaiju N°8">
+                    <div class="info-pelicula">
+                        <h3>Kaiju N°8</h3>
+                        <p>Un hombre convertido en monstruo decide perseguir su sueño de infancia contra todo pronóstico.</p>
+                        <button class="btn-detalles" data-movie="4">Ver detalles</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: MODAL DE DETALLES
+             - Se activa al hacer clic en "Ver detalles"
+             - Estructura:
+                * Header con título y botón de cierre
+                * Body con trailer y detalles
+                * Footer con botón de reserva
+             - Datos dinámicos vía JavaScript
+        -->
+        <div class="modal" id="movieModal">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h3 id="modalTitle">Título de la película</h3>
+                    <button class="modal-close" id="closeModal">&times;</button>
+                </div>
+                <!-- Body -->
+                <div class="modal-body">
+                    <!-- Tráiler embebido -->
+                    <iframe id="modalTrailer" class="modal-trailer" src="" allowfullscreen></iframe>
+                    <!-- Detalles adicionales -->
+                    <div class="modal-details" id="modalDetails">
+                        <div class="detail-item">
+                            <i class="fas fa-film"></i>
+                            <span id="modalGenre">Género</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="modalDuration">Duración</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-star"></i>
+                            <span id="modalRating">Clasificación</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="modalReleaseDate">Fecha de estreno</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <span id="modalCast">Reparto</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-video"></i>
+                            <span id="modalDirector">Director</span>
+                        </div>
+                        <div class="detail-item imdb-link">
+                            <i class="fas fa-link"></i>
+                            <a id="modalIMBd" href="#" target="_blank" rel="noopener noreferrer">Más información en IMDb</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <!-- Botno para reservar-->
+                    <button class="btn-reservar">Reservar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Reservas -->
+    <div class="modal" id="reservationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reservationTitle">Reservar Película</h3>
+                <button class="modal-close" id="closeReservation">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reservationForm" class="reservation-form">
+                    <div class="form-group">
+                        <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha"><i class="fas fa-calendar"></i> Fecha</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="asientos"><i class="fas fa-chair"></i> Número de Asientos</label>
+                        <input type="number" id="asientos" min="1" max="10" required>
+                    </div>
+                    <button type="submit" class="btn-confirmar">Confirmar Reserva</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
