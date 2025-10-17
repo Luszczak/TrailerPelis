@@ -143,8 +143,7 @@
             <h1 class="section-title">En Cartelera</h1>
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
-                    <!-- Las películas se generarán dinámicamente aquí -->
-                </div>
+                    </div>
             </div>
             <div class="carousel-controls">
                 <button class="carousel-btn" id="prevBtn">
@@ -155,19 +154,16 @@
                 </button>
             </div>
             <div class="carousel-indicators" id="indicators">
-                <!-- Los indicadores se generarán dinámicamente aquí -->
-            </div>
+                </div>
         </section>
 
         <section class="movies-grid-section">
             <h1 class="section-title">Próximos Estrenos</h1>
             <div class="movies-grid" id="upcoming-movies-grid">
-                <!-- Las películas se generarán dinámicamente aquí -->
-            </div>
+                </div>
         </section>
     </main>
 
-    <!-- MODALES -->
     <div id="movieModal" class="modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -196,8 +192,7 @@
                 </header>
                 <div class="seating-chart-title">Selecciona tus asientos</div>
                 <div class="seating-chart" id="seatingChart">
-                    <!-- Los asientos se generarán dinámicamente aquí -->
-                </div>
+                    </div>
                 <div class="seat-legend">
                     <div class="seat-legend-item">
                         <div class="seat-legend-color available"></div>
@@ -226,8 +221,7 @@
                     <div class="form-group">
                         <label for="fecha"><i class="fas fa-calendar"></i> Fecha de la función</label>
                         <select id="fecha" required>
-                            <!-- Las fechas se generarán dinámicamente aquí -->
-                        </select>
+                            </select>
                     </div>
                     <div class="form-group">
                         <label for="selectedSeatsCount"><i class="fas fa-chair"></i> Asientos seleccionados</label>
@@ -242,30 +236,13 @@
         </div>
     </div>
     
-    <!-- Modal para mensajes de advertencia -->
-    <div id="messageModal" class="modal message-modal">
-        <div class="modal-content">
-            <header class="modal-header">
-                <h3 id="messageTitle"></h3>
-                <button class="modal-close" data-close-button>&times;</button>
-            </header>
-            <div class="modal-body">
-                <p id="messageText"></p>
-            </div>
-            <footer class="modal-footer" style="justify-content: center;">
-                <button class="btn-primary" data-close-button>OK</button>
-            </footer>
-        </div>
-    </div>
-
-
     <div id="confirmationModal" class="modal">
         <div class="modal-content confirmation-content">
             <header class="modal-header" style="width: 100%;">
                 <h3 id="confirmationTitle">Reserva Confirmada</h3>
                 <button class="modal-close" data-close-button>&times;</button>
             </header>
-            <p>¡Tu reserva ha sido un éxito! Aquí está tu ticket.</p>
+            <p>¡Tu pago ha sido procesado con éxito! Aquí está tu ticket.</p>
             <div class="ticket ticket-professional" id="ticket">
                 <div id="ticketInfo"></div>
             </div>
@@ -279,6 +256,63 @@
                     Imprimir Ticket
                 </button>
             </div>
+        </div>
+    </div>
+    
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h3>Procesar Pago</h3>
+                <button class="modal-close" data-close-button>&times;</button>
+            </header>
+            <div class="modal-body">
+                <form id="paymentForm" class="reservation-form" novalidate>
+                    <div class="form-group">
+                        <label for="paymentAmount">Monto a Pagar</label>
+                        <input type="text" id="paymentAmount" readonly style="font-size: 2rem; text-align: center; color: var(--color-primary); background-color: rgba(0,0,0,0.2);">
+                    </div>
+                    <div class="form-group">
+                        <label for="cardName">Nombre en la tarjeta</label>
+                        <input type="text" id="cardName" autocomplete="cc-name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="cardNumber">Número de tarjeta</label>
+                        <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" required />
+                    </div>
+                    <div style="display: flex; gap: 2rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="exp">Expiración (MM/AA)</label>
+                            <input type="text" id="exp" inputmode="numeric" maxlength="5" placeholder="08/26" autocomplete="cc-exp" required />
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label for="cvv">CVV</label>
+                            <input type="password" id="cvv" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required />
+                        </div>
+                    </div>
+                    <div id="paymentErrors" style="min-height: 1.2em; text-align: center; font-weight: bold; color: #FF1D58;"></div>
+                </form>
+            </div>
+            <footer class="modal-footer" style="justify-content: center;">
+                <button type="submit" form="paymentForm" class="btn-primary" id="payBtn">
+                    <i class="fas fa-credit-card"></i>
+                    Pagar
+                </button>
+            </footer>
+        </div>
+    </div>
+    <div id="messageModal" class="modal message-modal">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h3 id="messageTitle"></h3>
+                <button class="modal-close" data-close-button>&times;</button>
+            </header>
+            <div class="modal-body">
+                <p id="messageText"></p>
+            </div>
+            <footer class="modal-footer" style="justify-content: center;">
+                <button class="btn-primary" data-close-button>OK</button>
+            </footer>
         </div>
     </div>
 
@@ -356,7 +390,7 @@
             <div class="modal-body">
                 <div class="faq-item">
                     <h4>¿Cómo reservo un asiento?</h4>
-                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus asientos en el mapa de la sala y completa tus datos.</p>
+                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus asientos en el mapa de la sala, completa tus datos y procesa el pago.</p>
                 </div>
                 <div class="faq-item">
                     <h4>¿Puedo cambiar mi reserva?</h4>
@@ -374,7 +408,7 @@
             </header>
             <div class="modal-body">
                 <p>"¡Me encantó la película! El sitio es muy fácil de usar." - Ana G.</p>
-                <p>"La selección de asientos es genial. Gran experiencia." - Juan P.</p>
+                <p>"La selección de asientos y el pago fueron geniales. Gran experiencia." - Juan P.</p>
             </div>
         </div>
     </div>
