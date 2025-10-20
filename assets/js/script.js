@@ -15,11 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const proximosEstrenos = [
-        { id: '5', title: 'Wicked', poster: 'https://es.web.img3.acsta.net/pictures/24/05/15/15/30/1458992.jpg', description: 'Una historia fantástica sobre el origen de las brujas de Oz.', imdb: 'https://www.imdb.com/title/tt12444318/' },
-        { id: '6', title: 'Deadpool y Wolverine', poster: 'https://hips.hearstapps.com/hmg-prod/images/deadpool-3-poster-65b169b165243.jpg', description: 'El mercenario bocazas regresa en una nueva aventura con un viejo amigo.', imdb: 'https://www.imdb.com/title/tt6263592/' },
-        { id: '7', title: 'Joker 2', poster: 'https://hips.hearstapps.com/hmg-prod/images/joker-folie-a-deux-poster-65d1dd3244243.jpg', description: 'El regreso del Príncipe Payaso del Crimen en un musical psicológico.', imdb: 'https://www.imdb.com/title/tt11315808/' },
-        { id: '8', title: 'Gladiator 2', poster: 'https://m.media-amazon.com/images/M/MV5BN2EyNDQ2MTEtYjAyOS00NjI0LTgxMTYtZDcxOTUyNDQ3Y2I2XkEyXkFqcGdeQXVyMjQ4MTk2Mzk@._V1_.jpg', description: 'Una nueva epopeya en el Coliseo con la secuela del clásico de Ridley Scott.', imdb: 'https://www.imdb.com/title/tt6121404/' },
-    ];
+                { id: '5', title: 'Wicked', poster: 'https://www.impawards.com/2024/posters/wicked_ver2.jpg', description: 'Una historia fantástica sobre el origen de las brujas de Oz.', imdb: 'https://www.imdb.com/title/tt12444318/' },
+                        { id: '6', title: 'Deadpool y Wolverine', poster: 'https://www.impawards.com/2024/posters/deadpool_and_wolverine.jpg', description: 'El mercenario bocazas regresa en una nueva aventura con un viejo amigo.', imdb: 'https://www.imdb.com/title/tt6263592/' },
+                                { id: '7', title: 'Joker 2', poster: 'https://www.impawards.com/2024/posters/joker_folie_a_deux.jpg', description: 'El regreso del Príncipe Payaso del Crimen en un musical psicológico.', imdb: 'https://www.imdb.com/title/tt11315808/' },
+                                        { id: '8', title: 'Gladiator 2', poster: 'https://www.impawards.com/2024/posters/gladiator_ii.jpg', description: 'Una nueva epopeya en el Coliseo con la secuela del clásico de Ridley Scott.', imdb: 'https://www.imdb.com/title/tt6121404/' },
+                                            ];
+
 
     const PRICE_PER_SEAT = 8000;
     let pendingReservationData = {};
