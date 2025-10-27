@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div id="main-backdrop"></div>
@@ -229,7 +232,7 @@
                     </div>
                     <button type="submit" class="btn-primary" id="confirmReservationBtn">
                         <i class="fas fa-check"></i>
-                        Confirmar Reserva
+                        Confirmar y Pagar
                     </button>
                 </form>
             </div>
@@ -243,23 +246,23 @@
                 <button class="modal-close" data-close-button>&times;</button>
             </header>
             <p>¡Tu pago ha sido procesado con éxito! Aquí está tu ticket.</p>
-            <div class="ticket ticket-professional" id="ticket">
-                <div id="ticketInfo"></div>
-            </div>
-            <div style="display: flex; gap: 1rem;">
-                <button class="btn-primary" id="downloadTicketBtn">
+            
+            <div id="ticket-wrapper">
+                </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn-primary" id="downloadPNGBtn">
                     <i class="fas fa-download"></i>
-                    Descargar Ticket
+                    Descargar PNG
                 </button>
-                <button class="btn-primary" id="printTicketBtn">
-                    <i class="fas fa-print"></i>
-                    Imprimir Ticket
+                <button class="btn-primary" id="downloadPDFBtn">
+                    <i class="fas fa-file-pdf"></i>
+                    Descargar PDF
                 </button>
             </div>
         </div>
     </div>
     
-
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -267,40 +270,80 @@
                 <button class="modal-close" data-close-button>&times;</button>
             </header>
             <div class="modal-body">
-                <form id="paymentForm" class="reservation-form" novalidate>
-                    <div class="form-group">
-                        <label for="paymentAmount">Monto a Pagar</label>
-                        <input type="text" id="paymentAmount" readonly style="font-size: 2rem; text-align: center; color: var(--color-primary); background-color: rgba(0,0,0,0.2);">
-                    </div>
-                    <div class="form-group">
-                        <label for="cardName">Nombre en la tarjeta</label>
-                        <input type="text" id="cardName" autocomplete="cc-name" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="cardNumber">Número de tarjeta</label>
-                        <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" required />
-                    </div>
-                    <div style="display: flex; gap: 2rem;">
-                        <div class="form-group" style="flex: 1;">
-                            <label for="exp">Expiración (MM/AA)</label>
-                            <input type="text" id="exp" inputmode="numeric" maxlength="5" placeholder="08/26" autocomplete="cc-exp" required />
+
+                <div class="payment-methods-tabs">
+                    <button class="payment-tab active" data-payment-method="card">
+                        <i class="fas fa-credit-card"></i> Tarjeta
+                    </button>
+                    <button class="payment-tab" data-payment-method="mp">
+                        <i class="fas fa-hand-holding-usd"></i> Mercado Pago
+                    </button>
+                    <button class="payment-tab" data-payment-method="paypal">
+                        <i class="fab fa-paypal"></i> PayPal
+                    </button>
+                </div>
+
+                <div id="payment-method-card" class="payment-method-content active">
+                    <form id="paymentForm" class="reservation-form" novalidate>
+                        <div class="form-group">
+                            <label for="paymentAmount">Monto a Pagar</label>
+                            <input type="text" id="paymentAmount" readonly style="font-size: 2rem; text-align: center; color: var(--color-primary); background-color: rgba(0,0,0,0.2);">
                         </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label for="cvv">CVV</label>
-                            <input type="password" id="cvv" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required />
+                        <div class="form-group">
+                            <label for="cardName">Nombre en la tarjeta</label>
+                            <input type="text" id="cardName" autocomplete="cc-name" required />
                         </div>
-                    </div>
-                    <div id="paymentErrors" style="min-height: 1.2em; text-align: center; font-weight: bold; color: #FF1D58;"></div>
-                </form>
+                        <div class="form-group">
+                            <label for="cardNumber">Número de tarjeta</label>
+                            <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" required />
+                        </div>
+                        <div style="display: flex; gap: 2rem;">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="exp">Expiración (MM/AA)</label>
+                                <input type="text" id="exp" inputmode="numeric" maxlength="5" placeholder="08/26" autocomplete="cc-exp" required />
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="cvv">CVV</label>
+                                <input type="password" id="cvv" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required />
+                            </div>
+                        </div>
+                        <div id="paymentErrors" style="min-height: 1.2em; text-align: center; font-weight: bold; color: #FF1D58;"></div>
+                        
+                        <footer class="modal-footer" style="justify-content: center; padding-top: 2rem; border-top: none; padding-bottom: 0;">
+                            <button type="submit" form="paymentForm" class="btn-primary" id="payBtn">
+                                <i class="fas fa-lock"></i>
+                                Pagar
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+
+                <div id="payment-method-mp" class="payment-method-content payment-facade">
+                    <img src="https://logotipoz.com/wp-content/uploads/2021/10/version-horizontal-large-logo-mercado-pago.png" alt="Mercado Pago" class="payment-logo mp">
+                    <p>Escanea el QR para pagar</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PlaceholderPayment" alt="QR Code" class="payment-qr">
+                    <p>O copia el siguiente código:</p>
+                    <input type="text" readonly value="000201010212006173000...c43ff" class="payment-copypaste">
+                    <button class="btn-primary" id="payWithMPBtn" style="margin-top: 2rem; background: #009EE3;">
+                        <i class="fas fa-check"></i>
+                        Ya realicé el pago
+                    </button>
+                </div>
+
+                <div id="payment-method-paypal" class="payment-method-content payment-facade">
+                    <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal" class="payment-logo paypal">
+                    <p>Inicia sesión para completar tu compra.</p>
+                    <button class="btn-primary" id="payWithPaypalBtn" style="background: #00457C; width: 100%; max-width: 300px;">
+                        <i class="fab fa-paypal"></i> Pagar con PayPal
+                    </button>
+                    <button class="btn-primary" id="payWithPaypalGuestBtn" style="background: #009cde; width: 100%; max-width: 300px; margin-top: 1rem;">
+                        Pagar con Tarjeta
+                    </button>
+                </div>
             </div>
-            <footer class="modal-footer" style="justify-content: center;">
-                <button type="submit" form="paymentForm" class="btn-primary" id="payBtn">
-                    <i class="fas fa-credit-card"></i>
-                    Pagar
-                </button>
-            </footer>
         </div>
     </div>
+    
     <div id="messageModal" class="modal message-modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -390,11 +433,11 @@
             <div class="modal-body">
                 <div class="faq-item">
                     <h4>¿Cómo reservo un asiento?</h4>
-                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus asientos en el mapa de la sala, completa tus datos y procesa el pago.</p>
+                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus asientos en el mapa de la sala, completa tus datos y haz clic en 'Confirmar y Pagar'. Serás llevado directamente a la pasarela de pago para finalizar tu reserva.</p>
                 </div>
                 <div class="faq-item">
                     <h4>¿Puedo cambiar mi reserva?</h4>
-                    <p>Por el momento, no es posible modificar una reserva. Si necesitas cambiarla, por favor cancela y vuelve a reservar.</p>
+                    <p>Por el momento, no es posible modificar una reserva. Si necesitas cambiarla, por favor contacta a soporte.</p>
                 </div>
             </div>
         </div>

@@ -347,7 +347,6 @@ main {
 .cartelera-section,
 .movies-grid-section {
     max-width: 120rem;
-    /* Reducido para una mejor apariencia */
     margin: 0 auto;
 }
 
@@ -397,9 +396,7 @@ body.theme-light .movie-slide {
 
 .movie-poster {
     width: 25rem;
-    /* Tamaño ajustado */
     height: 37.5rem;
-    /* Tamaño ajustado */
     object-fit: cover;
 }
 
@@ -500,7 +497,6 @@ body.theme-light .meta-item {
 .movies-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-    /* Tamaño de tarjeta ajustado */
     gap: 3rem;
     margin-top: 3rem;
 }
@@ -531,7 +527,6 @@ body.theme-light .movie-card {
 .movie-card img {
     width: 100%;
     height: 37.5rem;
-    /* Tamaño ajustado */
     object-fit: cover;
 }
 
@@ -568,6 +563,14 @@ body.theme-light .movie-card {
 .btn-primary:hover {
     transform: translateY(-0.2rem);
     box-shadow: 0 0.8rem 2.5rem rgba(55, 208, 255, 0.4);
+}
+
+.btn-primary[disabled] {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
 }
 
 body.theme-light .btn-primary {
@@ -610,6 +613,23 @@ body.theme-light .btn-primary:hover {
     border: 0.2rem solid var(--color-primary);
     transition: all var(--transition-normal);
 }
+
+/* Scrollbar para modales */
+.modal-content::-webkit-scrollbar {
+    width: 0.8rem;
+}
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.4rem;
+}
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 0.4rem;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+}
+
 
 .modal-header {
     display: flex;
@@ -804,87 +824,150 @@ body.theme-light .reservation-form select {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
-.ticket-professional {
-    border: 0.2rem dashed var(--color-primary);
-    border-radius: 1rem;
-    padding: 3rem;
+#ticket-wrapper {
     width: 100%;
-    max-width: 50rem;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    /* Estilos para la captura de pantalla */
+    background: var(--bg-modal); 
+}
+
+/* ========== AÑADIDO: Estilos de Ticket "Fachero" ========== */
+.ticket-container {
+    background: var(--text-primary);
+    color: #333;
+    border-radius: 1.2rem;
+    width: 100%;
+    max-width: 45rem;
     margin: 0 auto;
-    background: var(--bg-card);
-    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 2.5rem; /* Espacio para el footer */
 }
 
-body.theme-light .ticket-professional {
-    border-color: var(--color-primary);
+.ticket-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30%;
+    border-left: 0.3rem dashed var(--text-muted);
+    opacity: 0.5;
 }
 
-.ticket-header {
+
+.ticket-header-new {
+    background: #222;
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: 0.1rem solid var(--text-muted);
 }
 
-.ticket-header h4 {
-    font-size: 2rem;
-    color: var(--color-primary);
+.ticket-logo {
+    width: 8rem;
+    height: auto;
+    filter: brightness(0) invert(1);
 }
 
-.ticket-header span {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--text-secondary);
-}
-
-.ticket-body {
-    padding-top: 1rem;
-    text-align: left;
-}
-
-.ticket-body p {
-    margin: 0.5rem 0;
-    font-size: 1.6rem;
-}
-
-.ticket-body b {
+.ticket-title-new {
+    font-size: 1.4rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--text-primary);
+    letter-spacing: 0.1rem;
 }
 
-.ticket-footer {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 0.1rem solid var(--text-muted);
-    text-align: center;
-    font-style: italic;
-    font-size: 1.2rem;
-    color: var(--text-secondary);
+.ticket-body-new {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
+
+.ticket-movie-details {
+    display: flex;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 0.2rem solid var(--text-muted);
+}
+
+.ticket-poster {
+    width: 8rem;
+    height: 12rem;
+    object-fit: cover;
+    border-radius: 0.8rem;
+}
+
+.ticket-movie-info {
+    text-align: left;
+    flex: 1;
+}
+
+.ticket-movie-info h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 0.5rem;
+}
+
+.ticket-movie-info p {
+    font-size: 1.4rem;
+    color: #555;
+}
+
+.ticket-reservation-details {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.ticket-qr-code {
+    padding: 0.5rem;
+    background: #fff;
+    border: 0.1rem solid var(--text-muted);
+    border-radius: 0.8rem;
+}
+
+.ticket-qr-code img {
+    width: 8rem;
+    height: 8rem;
+    display: block;
+}
+
+.ticket-user-info {
+    text-align: left;
+    font-size: 1.4rem;
+}
+
+.ticket-user-info p {
+    margin: 0.5rem 0;
+}
+.ticket-user-info p strong {
+    color: #000;
+}
+
+.ticket-footer-new {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    padding: 0.5rem;
+    background: var(--text-primary);
+    border-top: 0.1rem dashed var(--text-muted);
+}
+
+/* --- Fin Estilos Ticket --- */
 
 @media print {
-    body * {
-        visibility: hidden;
-    }
-
-    .ticket,
-    .ticket * {
-        visibility: visible;
-    }
-
-    .ticket {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        box-shadow: none;
-        background: none;
-        color: black;
-    }
+    /* ... (los estilos de impresión pueden quedar igual) ... */
 }
 
 /* RESPONSIVE DESIGN */
@@ -946,6 +1029,18 @@ body.theme-light .ticket-professional {
     .reservation-form-container {
         width: 100%;
     }
+
+    .ticket-movie-details, .ticket-reservation-details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .ticket-movie-info, .ticket-user-info {
+        text-align: center;
+    }
+    .ticket-container::before {
+        display: none; /* Ocultar línea punteada en móvil */
+    }
 }
 
 /* ANIMACIONES */
@@ -985,4 +1080,95 @@ body.theme-light .ticket-professional {
 
 .message-modal .modal-content h3 {
     margin: 0;
+}
+
+
+/* ========== ELIMINADO: Estilos de "Mis Reservas" ========== */
+/* .reservas-item, .reservas-item-poster, etc. ELIMINADOS */
+
+
+/* ========== MODIFICADO: Estilos Pestañas y Fachadas de Pago (BUG ARREGLADO) ========== */
+.payment-methods-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 0.2rem solid var(--text-muted);
+}
+
+.payment-tab {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.6rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-bottom: 0.3rem solid transparent;
+    transform: translateY(0.2rem); 
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+body.theme-light .payment-tab {
+    color: var(--text-secondary);
+}
+
+.payment-tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.payment-method-content {
+    display: none; /* Ocultar por defecto */
+}
+
+.payment-method-content.active {
+    display: block; /* Mostrar solo el activo */
+    animation: fadeIn 0.5s ease;
+}
+
+/* ESTILOS PARA LAS FACHADAS (SOLO SE APLICAN CUANDO ESTÁN ACTIVAS) */
+.payment-facade {
+    /* display: flex; <--- ELIMINADO DE AQUÍ */
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+/* AÑADIDO: Cuando la fachada está activa, se vuelve flex */
+.payment-method-content.payment-facade.active {
+    display: flex;
+}
+
+
+.payment-logo {
+    max-height: 4rem;
+    width: auto;
+}
+.payment-logo.mp {
+    filter: invert(0.1);
+}
+body.theme-light .payment-logo.mp {
+    filter: none;
+}
+.payment-qr {
+    width: 15rem;
+    height: 15rem;
+    border-radius: 1rem;
+    border: 0.2rem solid var(--text-primary);
+}
+.payment-copypaste {
+    width: 100%;
+    max-width: 30rem;
+    padding: 1rem;
+    background: rgba(0,0,0,0.2);
+    border: 0.1rem solid var(--text-muted);
+    color: var(--text-primary);
+    border-radius: 0.8rem;
+    text-align: center;
+    font-size: 1.2rem;
 }
