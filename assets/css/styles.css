@@ -1,25 +1,82 @@
-/* CSS Variables */
+/* 
+    ============================================================
+    ESTILOS DE TRAILERPELIS++
+    ============================================================
+    Este archivo contiene todos los estilos visuales de la página.
+    
+    ESTRUCTURA DEL ARCHIVO:
+    1. Variables CSS (colores, espaciados, sombras)
+    2. Temas de colores (oscuro, claro, etc.)
+    3. Estilos generales (body, header)
+    4. Componentes (carrusel, tarjetas, modales)
+    5. Responsive (adaptación a móviles)
+    ============================================================
+*/
+
+/* ==================== VARIABLES CSS (CUSTOM PROPERTIES) ====================
+   Las variables CSS permiten definir valores reutilizables.
+   Se acceden con var(--nombre-variable).
+   Ejemplo: background: var(--bg-main);
+   
+   Estas son las variables del tema OSCURO (por defecto)
+*/
 :root {
+    /* Colores principales */
     --color-primary: #37d0ff;
+    /* Color principal (celeste) */
     --color-primary-light: #ff80ee;
+    /* Color secundario (rosa) */
     --color-accent: #00a7ff;
+    /* Color de acento (azul) */
+
+    /* Colores de fondo */
     --bg-main: #000613;
+    /* Fondo de la página */
     --bg-card: rgba(20, 20, 35, 0.6);
+    /* Fondo de las tarjetas */
     --bg-modal: rgba(10, 10, 40, 0.9);
+    /* Fondo de los modales */
     --bg-overlay: rgba(1, 1, 19, 0.75);
+    /* Fondo del overlay */
+
+    /* Colores de texto */
     --text-primary: #f8f9fa;
+    /* Texto principal (blanco) */
     --text-secondary: #e0e0e0;
+    /* Texto secundario (gris claro) */
     --text-muted: #ccc;
+    /* Texto apagado */
+
+    /* Sombras */
     --shadow-md: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
+    /* Sombra normal */
     --shadow-hover: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.5);
+    /* Sombra al pasar mouse */
+
+    /* Espaciados y Bordes */
     --border-radius-md: 1.5rem;
+    /* Bordes redondeados */
     --spacing-sm: 1rem;
+    /* Espaciado pequeño */
     --spacing-md: 2rem;
-    --transition-normal: 0.3s ease;
-    --blur-effect: blur(0.5rem);
+    /* Espaciado mediano */
+
+    /* Transiciones y Efectos - Curvas de timing profesionales */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transición rápida */
+    --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transición normal */
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Transición lenta */
+    --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Con rebote suave */
+    --blur-effect: blur(0.8rem);
+    /* Efecto de desenfoque */
 }
 
-/* Tema Claro (Mejorado) */
+/* ==================== TEMA CLARO ====================
+   Se activa cuando body tiene la clase "theme-light"
+*/
 body.theme-light {
     --bg-main: #FFFFFF;
     --color-primary: #007BFF;
@@ -76,7 +133,7 @@ body.theme-futuristic {
     --text-secondary: #A0C0B8;
 }
 
-/* Main Backdrop */
+/* Main Backdrop - Fondo dinámico que cambia con el carrusel */
 #main-backdrop {
     position: fixed;
     top: 0;
@@ -85,10 +142,12 @@ body.theme-futuristic {
     height: 100%;
     background-size: cover;
     background-position: center;
-    filter: blur(24px) brightness(0.4);
-    transform: scale(1.1);
-    transition: background-image 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+    filter: blur(30px) brightness(0.35) saturate(1.2);
+    transform: scale(1.15);
+    transition: background-image 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease;
     z-index: -1;
+    opacity: 1;
 }
 
 * {
@@ -100,6 +159,7 @@ body.theme-futuristic {
 html {
     font-size: 62.5%;
     /* 1rem = 10px */
+    scroll-behavior: smooth;
 }
 
 body {
@@ -108,7 +168,9 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background var(--transition-normal), color var(--transition-normal);
+    transition: background var(--transition-slow), color var(--transition-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* HEADER MODERNO */
@@ -176,6 +238,265 @@ body.theme-light .header {
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-primary);
+}
+
+/* Search Results Dropdown */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-modal);
+    border: 0.2rem solid var(--color-primary);
+    border-radius: 0 0 1.5rem 1.5rem;
+    max-height: 40rem;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: var(--shadow-md);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+    border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: rgba(55, 208, 255, 0.15);
+}
+
+body.theme-light .search-result-item:hover {
+    background: rgba(0, 123, 255, 0.15);
+}
+
+.search-result-item.no-results {
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: default;
+}
+
+.search-result-item.no-results:hover {
+    background: none;
+}
+
+.search-result-item img {
+    width: 4rem;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.search-result-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.search-result-title {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
+.search-result-year {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.search-result-rating {
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-result-rating i {
+    position: static;
+    transform: none;
+    font-size: 1.2rem;
+}
+
+/* Loading Message */
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem;
+    color: var(--color-primary);
+    font-size: 1.6rem;
+    width: 100%;
+}
+
+.loading-message i {
+    font-size: 2rem;
+}
+
+/* Movie Card Metadata */
+.movie-card-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+}
+
+.movie-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.movie-card-meta i {
+    color: var(--color-primary);
+}
+
+/* Modal Details Grid - IMPROVED LAYOUT */
+.modal-overview {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.modal-info-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-main-info {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.theme-light .modal-main-info {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+}
+
+.stat-item i {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 0.3rem;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-credits {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.credit-item {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+}
+
+.credit-label {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 7rem;
+}
+
+.credit-value {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.tmdb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 1.3rem;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 2rem;
+    transition: all var(--transition-normal);
+    margin-top: 0.5rem;
+    width: fit-content;
+}
+
+.tmdb-link:hover {
+    background: rgba(55, 208, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+body.theme-light .tmdb-link:hover {
+    background: rgba(0, 123, 255, 0.15);
+}
+
+@media (max-width: 600px) {
+    .modal-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .stat-item {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .stat-item i {
+        font-size: 1.4rem;
+    }
+
+    .credit-item {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .credit-label {
+        min-width: auto;
+    }
 }
 
 
@@ -618,14 +939,17 @@ body.theme-light .btn-primary:hover {
 .modal-content::-webkit-scrollbar {
     width: 0.8rem;
 }
+
 .modal-content::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 0.4rem;
 }
+
 .modal-content::-webkit-scrollbar-thumb {
     background: var(--color-primary);
     border-radius: 0.4rem;
 }
+
 .modal-content::-webkit-scrollbar-thumb:hover {
     background: var(--color-accent);
 }
@@ -653,11 +977,94 @@ body.theme-light .btn-primary:hover {
     color: var(--color-primary);
 }
 
-.modal-trailer {
+.modal-trailer,
+.trailer-thumbnail {
     width: 100%;
-    height: 40rem;
+    height: 30rem;
     border-radius: var(--border-radius-md);
     margin-bottom: 2rem;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+}
+
+.trailer-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.trailer-thumbnail:hover img {
+    transform: scale(1.05);
+}
+
+.trailer-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8rem;
+    height: 8rem;
+    background: rgba(255, 0, 0, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+}
+
+.trailer-play-btn i {
+    font-size: 3.5rem;
+    color: #fff;
+}
+
+.trailer-thumbnail:hover .trailer-play-btn {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(255, 0, 0, 1);
+}
+
+.trailer-label {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+}
+
+.trailer-thumbnail:hover .trailer-label {
+    background: var(--color-primary);
+    color: #000;
+}
+
+.trailer-thumbnail.no-trailer,
+.trailer-thumbnail.loading {
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    cursor: default;
+}
+
+.trailer-thumbnail.no-trailer i,
+.trailer-thumbnail.loading i {
+    font-size: 4rem;
+}
+
+.trailer-thumbnail.loading i {
+    color: var(--color-primary);
 }
 
 /* MODAL DE RESERVA */
@@ -816,6 +1223,7 @@ body.theme-light .reservation-form select {
     font-weight: bold;
     margin-top: 1rem;
 }
+
 /* === FIN DE ESTILOS DE PAGO === */
 
 /* MODAL DE CONFIRMACIÓN */
@@ -833,7 +1241,7 @@ body.theme-light .reservation-form select {
     justify-content: center;
     padding: 1rem;
     /* Estilos para la captura de pantalla */
-    background: var(--bg-modal); 
+    background: var(--bg-modal);
 }
 
 /* ========== AÑADIDO: Estilos de Ticket "Fachero" ========== */
@@ -847,7 +1255,8 @@ body.theme-light .reservation-form select {
     box-shadow: var(--shadow-md);
     overflow: hidden;
     position: relative;
-    padding-bottom: 2.5rem; /* Espacio para el footer */
+    padding-bottom: 2.5rem;
+    /* Espacio para el footer */
 }
 
 .ticket-container::before {
@@ -947,6 +1356,7 @@ body.theme-light .reservation-form select {
 .ticket-user-info p {
     margin: 0.5rem 0;
 }
+
 .ticket-user-info p strong {
     color: #000;
 }
@@ -1030,16 +1440,21 @@ body.theme-light .reservation-form select {
         width: 100%;
     }
 
-    .ticket-movie-details, .ticket-reservation-details {
+    .ticket-movie-details,
+    .ticket-reservation-details {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    .ticket-movie-info, .ticket-user-info {
+
+    .ticket-movie-info,
+    .ticket-user-info {
         text-align: center;
     }
+
     .ticket-container::before {
-        display: none; /* Ocultar línea punteada en móvil */
+        display: none;
+        /* Ocultar línea punteada en móvil */
     }
 }
 
@@ -1105,7 +1520,7 @@ body.theme-light .reservation-form select {
     font-weight: 600;
     transition: all 0.3s ease;
     border-bottom: 0.3rem solid transparent;
-    transform: translateY(0.2rem); 
+    transform: translateY(0.2rem);
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
@@ -1121,11 +1536,13 @@ body.theme-light .payment-tab {
 }
 
 .payment-method-content {
-    display: none; /* Ocultar por defecto */
+    display: none;
+    /* Ocultar por defecto */
 }
 
 .payment-method-content.active {
-    display: block; /* Mostrar solo el activo */
+    display: block;
+    /* Mostrar solo el activo */
     animation: fadeIn 0.5s ease;
 }
 
@@ -1149,26 +1566,234 @@ body.theme-light .payment-tab {
     max-height: 4rem;
     width: auto;
 }
+
 .payment-logo.mp {
     filter: invert(0.1);
 }
+
 body.theme-light .payment-logo.mp {
     filter: none;
 }
+
 .payment-qr {
     width: 15rem;
     height: 15rem;
     border-radius: 1rem;
     border: 0.2rem solid var(--text-primary);
 }
+
 .payment-copypaste {
     width: 100%;
     max-width: 30rem;
     padding: 1rem;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     border: 0.1rem solid var(--text-muted);
     color: var(--text-primary);
     border-radius: 0.8rem;
     text-align: center;
     font-size: 1.2rem;
+}
+
+/* ==================== ANIMACIONES KEYFRAMES ====================
+   Animaciones profesionales para una experiencia fluida
+*/
+
+/* Animación de entrada con desvanecimiento */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animación de entrada desde abajo */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación de entrada con escala */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animación de pulso suave */
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* Animación del spinner de carga */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Aplicar animaciones a elementos */
+.movie-card {
+    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+/* Delay escalonado para las tarjetas */
+.movie-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.movie-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.movie-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.movie-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.movie-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.movie-card:nth-child(6) {
+    animation-delay: 0.3s;
+}
+
+.movie-card:nth-child(7) {
+    animation-delay: 0.35s;
+}
+
+.movie-card:nth-child(8) {
+    animation-delay: 0.4s;
+}
+
+/* Modal con animación de escala */
+.modal.active .modal-content {
+    animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Carrusel con transición más suave */
+.carousel-track {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover más suave en botones */
+.btn-primary {
+    transition: all var(--transition-normal);
+    will-change: transform, box-shadow;
+}
+
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Tarjetas con mejor hover */
+.movie-card {
+    transition: transform var(--transition-normal),
+        box-shadow var(--transition-normal),
+        border-color var(--transition-fast);
+    will-change: transform;
+}
+
+.movie-card:hover {
+    transform: translateY(-0.8rem) scale(1.01);
+}
+
+/* Mejorar transición del slide */
+.movie-slide {
+    transition: transform var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+.movie-slide:hover {
+    transform: scale(1.005);
+}
+
+/* Mejora de los indicadores del carrusel */
+.indicator {
+    transition: all var(--transition-normal);
+}
+
+.indicator:hover {
+    transform: scale(1.2);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Header con transición suave al ocultar */
+.header {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        background var(--transition-normal);
+}
+
+/* Dropdown con animación mejorada */
+.dropdown {
+    transition: opacity var(--transition-fast),
+        visibility var(--transition-fast),
+        transform var(--transition-normal);
+}
+
+/* Input focus más suave */
+.search-bar input,
+.reservation-form input,
+.reservation-form select {
+    transition: border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.search-bar input:focus,
+.reservation-form input:focus,
+.reservation-form select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(55, 208, 255, 0.15);
+}
+
+/* Asientos con transición más suave */
+.seat {
+    transition: all var(--transition-fast);
+}
+
+.seat:not(.unavailable):hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Loading spinner con animación */
+.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Efecto de parallax sutil en el backdrop */
+#main-backdrop {
+    transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1);
 }

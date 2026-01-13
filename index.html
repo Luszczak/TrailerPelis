@@ -1,26 +1,58 @@
 <!DOCTYPE html>
+<!-- 
+    ============================================================
+    TRAILERPELIS++ - Aplicación de Cartelera de Cine
+    ============================================================
+    Proyecto escolar que muestra películas usando la API de TMDB
+    
+    ARCHIVOS DEL PROYECTO:
+    - index.html     → Esta página (estructura HTML)
+    - assets/css/styles.css → Estilos visuales
+    - assets/js/script.js   → Lógica y funcionalidad
+    ============================================================
+-->
 <html lang="es">
+
+<!-- ==================== CABECERA DEL DOCUMENTO ==================== -->
+<!-- Aquí se cargan los recursos externos: fuentes, iconos, estilos -->
+
 <head>
+    <!-- Configuración de caracteres y responsive -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!-- Título que aparece en la pestaña del navegador -->
     <title>TrailerPelis++</title>
+
+    <!-- Font Awesome: Biblioteca de iconos (fas fa-star, fas fa-play, etc.) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Fonts: Tipografía Inter para un diseño moderno -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Nuestros estilos CSS personalizados -->
     <link rel="stylesheet" href="assets/css/styles.css">
-    
+
+    <!-- html2canvas: Biblioteca para capturar elementos HTML como imagen (para el ticket) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- jsPDF: Biblioteca para generar archivos PDF (para descargar el ticket) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
+
 <body>
     <div id="main-backdrop"></div>
     <header class="header">
         <nav class="nav-container">
             <img src="assets/img/logo.png" alt="TrailerPelis++" class="logo">
             <div class="search-bar">
-                <input type="text" placeholder="Buscar películas...">
+                <input type="text" id="searchInput" placeholder="Buscar películas..." autocomplete="off">
                 <i class="fas fa-search"></i>
+                <div class="search-results" id="searchResults"></div>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -146,7 +178,7 @@
             <h1 class="section-title">En Cartelera</h1>
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
-                    </div>
+                </div>
             </div>
             <div class="carousel-controls">
                 <button class="carousel-btn" id="prevBtn">
@@ -157,13 +189,13 @@
                 </button>
             </div>
             <div class="carousel-indicators" id="indicators">
-                </div>
+            </div>
         </section>
 
         <section class="movies-grid-section">
             <h1 class="section-title">Próximos Estrenos</h1>
             <div class="movies-grid" id="upcoming-movies-grid">
-                </div>
+            </div>
         </section>
     </main>
 
@@ -174,7 +206,10 @@
                 <button class="modal-close" data-close-button>&times;</button>
             </header>
             <div class="modal-body">
-                <iframe id="modalTrailer" class="modal-trailer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe id="modalTrailer" class="modal-trailer" src="" frameborder="0"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
                 <div id="modalDetails" class="modal-details"></div>
             </div>
             <footer class="modal-footer">
@@ -195,7 +230,7 @@
                 </header>
                 <div class="seating-chart-title">Selecciona tus asientos</div>
                 <div class="seating-chart" id="seatingChart">
-                    </div>
+                </div>
                 <div class="seat-legend">
                     <div class="seat-legend-item">
                         <div class="seat-legend-color available"></div>
@@ -224,7 +259,7 @@
                     <div class="form-group">
                         <label for="fecha"><i class="fas fa-calendar"></i> Fecha de la función</label>
                         <select id="fecha" required>
-                            </select>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="selectedSeatsCount"><i class="fas fa-chair"></i> Asientos seleccionados</label>
@@ -238,7 +273,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="confirmationModal" class="modal">
         <div class="modal-content confirmation-content">
             <header class="modal-header" style="width: 100%;">
@@ -246,10 +281,10 @@
                 <button class="modal-close" data-close-button>&times;</button>
             </header>
             <p>¡Tu pago ha sido procesado con éxito! Aquí está tu ticket.</p>
-            
+
             <div id="ticket-wrapper">
-                </div>
-            
+            </div>
+
             <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                 <button class="btn-primary" id="downloadPNGBtn">
                     <i class="fas fa-download"></i>
@@ -262,7 +297,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -287,7 +322,8 @@
                     <form id="paymentForm" class="reservation-form" novalidate>
                         <div class="form-group">
                             <label for="paymentAmount">Monto a Pagar</label>
-                            <input type="text" id="paymentAmount" readonly style="font-size: 2rem; text-align: center; color: var(--color-primary); background-color: rgba(0,0,0,0.2);">
+                            <input type="text" id="paymentAmount" readonly
+                                style="font-size: 2rem; text-align: center; color: var(--color-primary); background-color: rgba(0,0,0,0.2);">
                         </div>
                         <div class="form-group">
                             <label for="cardName">Nombre en la tarjeta</label>
@@ -295,21 +331,26 @@
                         </div>
                         <div class="form-group">
                             <label for="cardNumber">Número de tarjeta</label>
-                            <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" required />
+                            <input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number"
+                                maxlength="19" placeholder="1234 5678 9012 3456" required />
                         </div>
                         <div style="display: flex; gap: 2rem;">
                             <div class="form-group" style="flex: 1;">
                                 <label for="exp">Expiración (MM/AA)</label>
-                                <input type="text" id="exp" inputmode="numeric" maxlength="5" placeholder="08/26" autocomplete="cc-exp" required />
+                                <input type="text" id="exp" inputmode="numeric" maxlength="5" placeholder="08/26"
+                                    autocomplete="cc-exp" required />
                             </div>
                             <div class="form-group" style="flex: 1;">
                                 <label for="cvv">CVV</label>
-                                <input type="password" id="cvv" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required />
+                                <input type="password" id="cvv" inputmode="numeric" maxlength="4" placeholder="123"
+                                    autocomplete="cc-csc" required />
                             </div>
                         </div>
-                        <div id="paymentErrors" style="min-height: 1.2em; text-align: center; font-weight: bold; color: #FF1D58;"></div>
-                        
-                        <footer class="modal-footer" style="justify-content: center; padding-top: 2rem; border-top: none; padding-bottom: 0;">
+                        <div id="paymentErrors"
+                            style="min-height: 1.2em; text-align: center; font-weight: bold; color: #FF1D58;"></div>
+
+                        <footer class="modal-footer"
+                            style="justify-content: center; padding-top: 2rem; border-top: none; padding-bottom: 0;">
                             <button type="submit" form="paymentForm" class="btn-primary" id="payBtn">
                                 <i class="fas fa-lock"></i>
                                 Pagar
@@ -319,9 +360,11 @@
                 </div>
 
                 <div id="payment-method-mp" class="payment-method-content payment-facade">
-                    <img src="https://logotipoz.com/wp-content/uploads/2021/10/version-horizontal-large-logo-mercado-pago.png" alt="Mercado Pago" class="payment-logo mp">
+                    <img src="https://logotipoz.com/wp-content/uploads/2021/10/version-horizontal-large-logo-mercado-pago.png"
+                        alt="Mercado Pago" class="payment-logo mp">
                     <p>Escanea el QR para pagar</p>
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PlaceholderPayment" alt="QR Code" class="payment-qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PlaceholderPayment"
+                        alt="QR Code" class="payment-qr">
                     <p>O copia el siguiente código:</p>
                     <input type="text" readonly value="000201010212006173000...c43ff" class="payment-copypaste">
                     <button class="btn-primary" id="payWithMPBtn" style="margin-top: 2rem; background: #009EE3;">
@@ -331,19 +374,22 @@
                 </div>
 
                 <div id="payment-method-paypal" class="payment-method-content payment-facade">
-                    <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal" class="payment-logo paypal">
+                    <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal"
+                        class="payment-logo paypal">
                     <p>Inicia sesión para completar tu compra.</p>
-                    <button class="btn-primary" id="payWithPaypalBtn" style="background: #00457C; width: 100%; max-width: 300px;">
+                    <button class="btn-primary" id="payWithPaypalBtn"
+                        style="background: #00457C; width: 100%; max-width: 300px;">
                         <i class="fab fa-paypal"></i> Pagar con PayPal
                     </button>
-                    <button class="btn-primary" id="payWithPaypalGuestBtn" style="background: #009cde; width: 100%; max-width: 300px; margin-top: 1rem;">
+                    <button class="btn-primary" id="payWithPaypalGuestBtn"
+                        style="background: #009cde; width: 100%; max-width: 300px; margin-top: 1rem;">
                         Pagar con Tarjeta
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div id="messageModal" class="modal message-modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -423,7 +469,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="faqModal" class="modal">
         <div class="modal-content">
             <header class="modal-header">
@@ -433,11 +479,14 @@
             <div class="modal-body">
                 <div class="faq-item">
                     <h4>¿Cómo reservo un asiento?</h4>
-                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus asientos en el mapa de la sala, completa tus datos y haz clic en 'Confirmar y Pagar'. Serás llevado directamente a la pasarela de pago para finalizar tu reserva.</p>
+                    <p>Haz clic en 'Ver Detalles' en la película que te interese, luego selecciona 'Reservar'. Elige tus
+                        asientos en el mapa de la sala, completa tus datos y haz clic en 'Confirmar y Pagar'. Serás
+                        llevado directamente a la pasarela de pago para finalizar tu reserva.</p>
                 </div>
                 <div class="faq-item">
                     <h4>¿Puedo cambiar mi reserva?</h4>
-                    <p>Por el momento, no es posible modificar una reserva. Si necesitas cambiarla, por favor contacta a soporte.</p>
+                    <p>Por el momento, no es posible modificar una reserva. Si necesitas cambiarla, por favor contacta a
+                        soporte.</p>
                 </div>
             </div>
         </div>
@@ -479,7 +528,8 @@
             </div>
         </div>
     </div>
-    
+
     <script src="assets/js/script.js"></script>
 </body>
+
 </html>
